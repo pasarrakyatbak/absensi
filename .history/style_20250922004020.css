@@ -1,0 +1,66 @@
+body {
+    background: #f9f9f9;
+    font-family: 'Poppins', sans-serif;
+}
+
+.lapak-card {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 12px;
+}
+
+.lapak-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+}
+
+.lapak-card.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+#absensiModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+}
+
+#absensiModal .modal-content {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+}
+
+#absensiLoading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+.lapak-card.hadir {
+    background: #d4edda;
+    /* hijau muda */
+    border: 1px solid #c3e6cb;
+}
+
+.lapak-card.belum {
+    background: #ffffff;
+    /* putih */
+    border: 1px solid #ddd;
+}

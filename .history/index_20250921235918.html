@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absensi Lapak Mingguan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container py-4">
+        <h1 class="text-center mb-4">📋 Absensi Lapak Minggu Ini</h1>
+
+        <div class="mb-3">
+            <input type="text" id="searchInput" class="form-control" placeholder="Cari nomor lapak atau nama...">
+        </div>
+
+        <div id="lapakContainer" class="row g-3"></div>
+    </div>
+
+    <!-- Modal Konfirmasi Absensi -->
+    <div id="absensiModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+     background: rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:9999;">
+        <div style="background:#fff; padding:20px; border-radius:10px; max-width:400px; width:90%; text-align:center;">
+            <h5 id="absensiInfo">Konfirmasi Absensi</h5>
+            <p>Apakah Anda yakin ingin mencatat absensi untuk lapak ini?</p>
+            <button id="modalAbsenBtn" class="btn btn-primary w-100 mb-2">Absen Sekarang</button>
+            <button onclick="closeAbsensiModal()" class="btn btn-secondary w-100">Batal</button>
+        </div>
+    </div>
+
+    <!-- Loading -->
+    <div id="absensiLoading"
+        style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+     background: rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:10000; flex-direction:column; color:#fff;">
+        <div class="spinner-border text-light mb-2" role="status"></div>
+        <div id="absensiLoadingText">Sedang menyimpan data...</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

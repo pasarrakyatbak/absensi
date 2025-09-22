@@ -1,0 +1,406 @@
+/* ================= GLOBAL ================= */
+body {
+    background: linear-gradient(135deg, #fdfbfb, #ebedee);
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    transition: background 0.4s ease, color 0.4s ease;
+}
+
+body.dark {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #f1f1f1;
+}
+
+body.modal-open {
+    overflow: hidden;
+}
+
+/* ================= CARD ================= */
+.lapak-card {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    border-radius: 20px;
+    padding: 1.5rem;
+    font-size: 18px;
+    font-weight: 600;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.3s ease, color 0.3s ease;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.lapak-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+}
+
+.lapak-card.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.lapak-card .card-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.lapak-card .card-text {
+    font-size: 28px;
+    font-weight: 700;
+    border-bottom: 2px solid #1e88e5;
+    padding-bottom: 6px;
+    margin-bottom: 1rem;
+    color: #1e88e5;
+    transition: all 0.3s ease;
+}
+
+body.dark .lapak-card {
+    background: rgba(30, 30, 30, 0.85);
+}
+
+body.dark .lapak-card .card-text {
+    color: #ffc107;
+    border-bottom: 2px solid #ffc107;
+}
+
+.lapak-card .card-subtext {
+    font-size: 16px;
+    font-style: italic;
+    color: #1976d2;
+    transition: color 0.3s ease;
+}
+
+body.dark .lapak-card .card-subtext {
+    color: #ffca28;
+}
+
+/* Card status colors */
+.lapak-card.hadir {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.lapak-card.belum {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+body.dark .lapak-card.hadir {
+    background: rgba(45, 62, 51, 0.85);
+    border: 1px solid #4caf50;
+    color: #90ee90;
+}
+
+body.dark .lapak-card.belum {
+    background: rgba(60, 30, 30, 0.85);
+    border: 1px solid #b23c3c;
+    color: #f28b82;
+}
+
+/* ================= BADGE ================= */
+.lapak-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 12px;
+    color: #fff;
+    z-index: 2;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    transition: background 0.3s ease, transform 0.25s ease;
+}
+
+.lapak-badge.bg-success {
+    background-color: #28a745;
+}
+
+.lapak-badge.bg-danger {
+    background-color: #dc3545;
+}
+
+body.dark .lapak-badge.bg-success {
+    background-color: #4caf50;
+}
+
+body.dark .lapak-badge.bg-danger {
+    background-color: #b23c3c;
+}
+
+.lapak-badge:hover {
+    transform: scale(1.1);
+}
+
+/* ================= MODAL ================= */
+#absensiModal,
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+    padding: 1rem;
+    backdrop-filter: blur(6px);
+}
+
+#absensiModal {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.modal-content {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 1.5rem;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+    transform: scale(0.9);
+    transition: transform 0.25s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.modal-overlay.show .modal-content {
+    transform: scale(1);
+}
+
+body.dark .modal-content {
+    background: rgba(30, 30, 30, 0.95);
+    color: #f1f1f1;
+}
+
+/* ================= BUTTONS ================= */
+#modalAbsenBtn,
+#modalHapusBtn {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 14px;
+    border: none;
+    transition: all 0.3s ease;
+}
+
+#modalAbsenBtn {
+    background: #28a745;
+    color: #fff;
+}
+
+#modalAbsenBtn:hover {
+    transform: scale(1.05);
+}
+
+#modalHapusBtn {
+    background: #dc3545;
+    color: #fff;
+    margin-bottom: 0.5rem;
+}
+
+#modalHapusBtn:hover {
+    transform: scale(1.05);
+    background: #b23c3c;
+}
+
+body.dark #modalAbsenBtn {
+    background: #4caf50;
+}
+
+body.dark #modalHapusBtn {
+    background: #b23c3c;
+}
+
+/* ================= SUMMARY CARDS ================= */
+.summary-cards {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.summary-card {
+    flex: 1 1 130px;
+    min-width: 130px;
+    padding: 1rem;
+    border-radius: 16px;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.summary-card.total {
+    background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+    color: #1565c0;
+}
+
+.summary-card.hadir {
+    background: linear-gradient(135deg, #d4edda, #a8e6a3);
+    color: #155724;
+}
+
+.summary-card.belum {
+    background: linear-gradient(135deg, #f8d7da, #f5a3a3);
+    color: #721c24;
+}
+
+body.dark .summary-card.total {
+    background: #1e3a5f;
+    color: #90caf9;
+}
+
+body.dark .summary-card.hadir {
+    background: #2d3e33;
+    color: #90ee90;
+}
+
+body.dark .summary-card.belum {
+    background: #5c2b2b;
+    color: #f28b82;
+}
+
+/* ================= TOAST ================= */
+.toast-container {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 3000;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.toast {
+    min-width: 250px;
+    max-width: 350px;
+    padding: 1rem 1.2rem;
+    border-radius: 16px;
+    color: #fff;
+    font-weight: 500;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    display: flex;
+    justify-content: space-between;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.4s ease;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.toast-success {
+    background: #28a745;
+}
+
+.toast-error {
+    background: #dc3545;
+}
+
+.toast-info {
+    background: #1976d2;
+}
+
+body.dark .toast-success {
+    background: #4caf50;
+}
+
+body.dark .toast-error {
+    background: #b23c3c;
+}
+
+body.dark .toast-info {
+    background: #64b5f6;
+}
+
+.toast-close {
+    cursor: pointer;
+    font-weight: bold;
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.2rem;
+}
+
+/* ================= RESPONSIVE ================= */
+@media(max-width:576px) {
+    .lapak-card {
+        font-size: 14px;
+        padding: 0.8rem;
+    }
+
+    .lapak-card .card-title {
+        font-size: 16px;
+    }
+
+    .lapak-card .card-text {
+        font-size: 18px;
+    }
+
+    #absensiModal .modal-content {
+        max-width: 95%;
+        padding: 1rem;
+    }
+}
+
+@media(min-width:577px) and (max-width:991px) {
+    .lapak-card {
+        font-size: 15px;
+        padding: 1rem;
+    }
+
+    .lapak-card .card-title {
+        font-size: 18px;
+    }
+
+    .lapak-card .card-text {
+        font-size: 19px;
+    }
+
+    #absensiModal .modal-content {
+        max-width: 80%;
+    }
+}
+
+@media(min-width:992px) {
+    .lapak-card {
+        font-size: 16px;
+        padding: 1.2rem;
+    }
+
+    .lapak-card .card-title {
+        font-size: 20px;
+    }
+
+    .lapak-card .card-text {
+        font-size: 20px;
+    }
+
+    #absensiModal .modal-content {
+        max-width: 400px;
+    }
+}
+
+@media(max-width:768px) {
+    .summary-cards {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .summary-card {
+        width: 90%;
+        max-width: none;
+    }
+}

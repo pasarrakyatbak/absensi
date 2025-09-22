@@ -1,0 +1,252 @@
+/* ================= GLOBAL ================= */
+body {
+    background: linear-gradient(135deg, #fdfbfb, #ebedee);
+    font-family: 'Inter', sans-serif;
+    color: #222;
+    margin: 0;
+    padding: 0;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+body.dark {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #f1f1f1;
+}
+
+/* ================= CARD ================= */
+.lapak-card {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+    border-radius: 20px;
+    padding: 1.5rem;
+    font-size: 18px;
+    font-weight: 600;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease, color 0.3s ease;
+    color: inherit;
+}
+
+.lapak-card:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+}
+
+.lapak-card.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.lapak-card .card-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    letter-spacing: 0.5px;
+}
+
+.lapak-card .card-text {
+    font-size: 18px;
+    font-weight: 600;
+    border-bottom: 1.5px solid #aaa;
+    padding-bottom: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.lapak-card .card-subtext {
+    font-size: 15px;
+    font-style: italic;
+    color: #555;
+}
+
+/* Status cards */
+.lapak-card.hadir {
+    background-color: rgba(212, 237, 218, 0.9);
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.lapak-card.belum {
+    background-color: rgba(248, 215, 218, 0.9);
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+body.dark .lapak-card.hadir {
+    background: rgba(45, 62, 51, 0.85);
+    border: 1px solid #4caf50;
+    color: #d0f0c0;
+}
+
+body.dark .lapak-card.belum {
+    background: rgba(60, 30, 30, 0.85);
+    border: 1px solid #b23c3c;
+    color: #f28b82;
+}
+
+/* ================= BADGE ================= */
+.lapak-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 0.35rem 0.7rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-radius: 12px;
+    color: #fff;
+    z-index: 2;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    transition: background 0.3s ease, transform 0.25s ease;
+}
+
+.lapak-badge.bg-success {
+    background-color: #28a745;
+}
+
+.lapak-badge.bg-danger {
+    background-color: #dc3545;
+}
+
+body.dark .lapak-badge.bg-success {
+    background-color: #4caf50;
+}
+
+body.dark .lapak-badge.bg-danger {
+    background-color: #b23c3c;
+}
+
+/* ================= MODAL ================= */
+#absensiModal,
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+    padding: 1rem;
+    backdrop-filter: blur(8px);
+}
+
+#absensiModal {
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.modal-overlay {
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.modal-overlay.show {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    background: rgba(255, 255, 255, 0.95);
+    padding: 2rem;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.15);
+    transform: scale(0.9);
+    transition: transform 0.25s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.modal-overlay.show .modal-content {
+    transform: scale(1);
+}
+
+body.dark .modal-content {
+    background: rgba(30, 30, 30, 0.95);
+    color: #f1f1f1;
+}
+
+/* ================= BUTTON ================= */
+#modalAbsenBtn,
+#modalHapusBtn {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 700;
+    border-radius: 14px;
+    border: none;
+    transition: transform 0.2s ease, background 0.3s ease;
+}
+
+#modalAbsenBtn {
+    background-color: #28a745;
+    color: #fff;
+}
+
+#modalAbsenBtn:hover {
+    transform: scale(1.05);
+    background: #218838;
+}
+
+#modalHapusBtn {
+    background-color: #dc3545;
+    color: #fff;
+    margin-bottom: 0.5rem;
+}
+
+#modalHapusBtn:hover {
+    transform: scale(1.05);
+    background: #b23c3c;
+}
+
+body.dark #modalAbsenBtn {
+    background: #4caf50;
+}
+
+body.dark #modalHapusBtn {
+    background: #b23c3c;
+}
+
+/* ================= RESPONSIVE ================= */
+@media(max-width:576px) {
+    .lapak-card {
+        font-size: 14px;
+        padding: 1rem;
+    }
+
+    .lapak-card .card-title {
+        font-size: 16px;
+    }
+
+    .lapak-card .card-text {
+        font-size: 14px;
+    }
+
+    #absensiModal .modal-content {
+        max-width: 95%;
+        padding: 1rem;
+    }
+}
+
+@media(min-width:577px) and (max-width:991px) {
+    .lapak-card {
+        font-size: 16px;
+        padding: 1.2rem;
+    }
+
+    .lapak-card .card-title {
+        font-size: 18px;
+    }
+}
+
+@media(min-width:992px) {
+    .lapak-card {
+        font-size: 18px;
+        padding: 1.5rem;
+    }
+
+    .lapak-card .card-title {
+        font-size: 22px;
+    }
+}

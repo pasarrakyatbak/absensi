@@ -1,0 +1,151 @@
+body {
+    background: #f9f9f9;
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+body.dark {
+    background: #121212;
+    color: #f1f1f1;
+}
+
+/* Card umum */
+.lapak-card {
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease, border 0.3s ease;
+    border-radius: 12px;
+}
+
+/* Hover effect */
+.lapak-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+}
+
+.lapak-card.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+/* Modal */
+#absensiModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+}
+
+#absensiModal .modal-content {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 12px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+body.dark #absensiModal .modal-content {
+    background: #1e1e1e;
+    color: #f1f1f1;
+}
+
+/* Loader */
+#absensiLoading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+/* Sudah hadir */
+.lapak-card.hadir {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+body.dark .lapak-card.hadir {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+/* Belum hadir */
+.lapak-card.belum {
+    background: #ffffff;
+    border: 1px solid #ddd;
+}
+
+body.dark .lapak-card.belum {
+    background: #1e1e1e;
+    border: 1px solid #444;
+}
+
+/* Toggle wrapper */
+.dark-toggle {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 1rem;
+}
+
+/* Hidden checkbox */
+.dark-toggle input {
+    display: none;
+}
+
+/* Label sebagai saklar */
+.toggle-label {
+    background: #ddd;
+    border-radius: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 70px;
+    height: 34px;
+    position: relative;
+    transition: background 0.3s ease;
+    padding: 0 8px;
+    font-size: 14px;
+}
+
+/* Bulatan */
+.toggle-ball {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 26px;
+    height: 26px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Ikon matahari 🌞 dan bulan 🌙 */
+.toggle-icon {
+    z-index: 2;
+}
+
+/* Aktif (dark mode) */
+.dark-toggle input:checked+.toggle-label {
+    background: #444;
+}
+
+.dark-toggle input:checked+.toggle-label .toggle-ball {
+    transform: translateX(36px);
+}

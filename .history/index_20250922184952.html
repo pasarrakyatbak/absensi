@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absensi Lapak</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="p-3">
+    <!-- Toggle Dark Mode -->
+    <div class="dark-toggle mb-3">
+        <input type="checkbox" id="darkSwitch">
+        <label for="darkSwitch" class="toggle-label">
+            <span class="toggle-icon">🌞</span>
+            <span class="toggle-ball"></span>
+            <span class="toggle-icon">🌙</span>
+        </label>
+    </div>
+
+    <div class="container">
+
+        <!-- Ringkasan -->
+        <div id="lapakSummary" class="summary-cards mb-4"></div>
+
+        <!-- Info Banner -->
+        <div id="absensiInfoBanner" class="alert text-center mb-3"></div>
+        <!-- Judul & Search -->
+        <h2 class="mb-3 text-center">Absensi Lapak Hari Ini</h2>
+        <input type="text" id="searchInput" class="form-control mb-4" placeholder="🔍 Cari lapak...">
+        <select id="lapakPageSelect" class="form-select mb-3">
+            <!-- Option akan diisi otomatis dari JS -->
+        </select>
+        <!-- Daftar Lapak -->
+        <div id="lapakContainer" class="row"></div>
+    </div>
+
+    <!-- Modal Absensi -->
+    <div id="absensiModal" class="modal-overlay">
+        <div class="modal-content">
+            <h5 id="absensiInfo"></h5>
+            <div id="modalStatusLabel" class="mb-3"></div> <!-- badge tampil di sini -->
+            <button id="modalAbsenBtn" class="btn btn-success mb-2">Absen</button>
+            <button id="modalHapusBtn" class="btn btn-danger mb-2">Hapus Absensi</button>
+            <button class="btn btn-secondary" onclick="closeAbsensiModal()">Tutup</button>
+        </div>
+    </div>
+
+
+    <!-- Loader -->
+    <div id="absensiLoading" class="d-none">
+        <div class="loader-content text-center">
+            <div class="spinner-border text-light" role="status" style="width:3rem;height:3rem;"></div>
+            <p id="absensiLoadingText" class="text-white mt-2">Sedang memproses...</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <!-- Toast Notification -->
+    <div id="toastContainer" class="toast-container"></div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+
+</html>

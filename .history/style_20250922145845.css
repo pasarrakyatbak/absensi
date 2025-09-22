@@ -1,0 +1,475 @@
+/* ================= BODY ================= */
+body {
+    background: linear-gradient(135deg, #fdfbfb, #ebedee);
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    transition: background 0.3s ease, color 0.3s ease;
+    margin: 0;
+    padding: 0;
+}
+
+body.dark {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #f1f1f1;
+}
+
+/* ================= CARD ================= */
+.lapak-card {
+    position: relative;
+    overflow: hidden;
+    font-size: 18px;
+    text-align: center;
+    border-radius: 16px;
+    padding: 1.5rem;
+    backdrop-filter: blur(8px);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.3s ease, border 0.3s ease, color 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.lapak-card.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+.lapak-card .card-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.lapak-card .card-text {
+    font-size: 24px;
+    font-weight: 600;
+    border-bottom: 2px solid #333;
+    padding-bottom: 4px;
+    margin-bottom: 0.5rem;
+}
+
+.lapak-card .card-subtext,
+.lapak-card .status-text {
+    font-size: 18px;
+    font-style: italic;
+    color: #333;
+}
+
+.lapak-card.hadir {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+.lapak-card.belum {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
+/* Hover effect */
+.lapak-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* ================= DARK MODE CARD ================= */
+body.dark .lapak-card {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ddd;
+}
+
+body.dark .lapak-card.hadir {
+    background-color: rgba(45, 62, 51, 0.8);
+    border: 1px solid #4caf50;
+    color: #90ee90;
+}
+
+body.dark .lapak-card.belum {
+    background-color: rgba(60, 30, 30, 0.8);
+    border: 1px solid #b23c3c;
+    color: #f28b82;
+}
+
+body.dark .lapak-card .card-subtext,
+body.dark .lapak-card .status-text {
+    color: #ccc;
+}
+
+body.dark .lapak-card:hover {
+    box-shadow: 0 10px 25px rgba(255, 255, 255, 0.1);
+}
+
+/* ================= BADGE ================= */
+.lapak-badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 8px;
+    color: #fff;
+    z-index: 2;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    transition: background 0.3s ease, transform 0.25s ease;
+}
+
+.lapak-badge.bg-success {
+    background-color: #28a745;
+}
+
+.lapak-badge.bg-danger {
+    background-color: #dc3545;
+}
+
+body.dark .lapak-badge.bg-success {
+    background-color: #4caf50;
+}
+
+body.dark .lapak-badge.bg-danger {
+    background-color: #b23c3c;
+}
+
+.badge {
+    display: inline-block;
+    margin-top: 6px;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.bg-success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.bg-danger {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+body.dark .bg-success {
+    background-color: #4caf50;
+}
+
+body.dark .bg-danger {
+    background-color: #b23c3c;
+}
+
+/* ================= MODAL ================= */
+#absensiModal,
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+    padding: 1rem;
+    box-sizing: border-box;
+    backdrop-filter: blur(6px);
+}
+
+.modal-overlay.show,
+#absensiModal.show {
+    display: flex;
+}
+
+#absensiModal .modal-content,
+.modal-content {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 1.5rem;
+    border-radius: 16px;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    transform: scale(0.9);
+    transition: transform 0.25s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.modal-overlay.show .modal-content {
+    transform: scale(1);
+}
+
+body.dark #absensiModal .modal-content,
+body.dark .modal-content {
+    background: rgba(30, 30, 30, 0.95);
+    color: #f1f1f1;
+}
+
+/* ================= MODAL BUTTON ================= */
+#modalAbsenBtn {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#modalAbsenBtn:hover {
+    transform: scale(1.05);
+}
+
+body.dark #modalAbsenBtn {
+    background-color: #4caf50;
+}
+
+#modalHapusBtn {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    margin-bottom: 0.5rem;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#modalHapusBtn:hover {
+    transform: scale(1.05);
+    background-color: #b23c3c;
+}
+
+body.dark #modalHapusBtn {
+    background-color: #b23c3c;
+}
+
+/* ================= TOGGLE DARK MODE ================= */
+.dark-toggle {
+    display: flex;
+    align-items: center;
+    margin: 1rem;
+}
+
+.dark-toggle input {
+    display: none;
+}
+
+.toggle-label {
+    background: #ddd;
+    border-radius: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 70px;
+    height: 34px;
+    position: relative;
+    transition: background 0.3s ease;
+    padding: 0 8px;
+    font-size: 14px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.toggle-ball {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 26px;
+    height: 26px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.3s ease, background 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.dark-toggle input:checked+.toggle-label {
+    background: #444;
+}
+
+.dark-toggle input:checked+.toggle-label .toggle-ball {
+    transform: translateX(36px);
+    background: #90ee90;
+}
+
+/* ================= SUMMARY ================= */
+.summary-cards {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.summary-card {
+    flex: 1 1 120px;
+    min-width: 120px;
+    padding: 1rem;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.summary-card.total {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.summary-card.hadir {
+    background: #d4edda;
+    color: #155724;
+}
+
+.summary-card.belum {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+body.dark .summary-card.total {
+    background: #1e3a5f;
+    color: #90caf9;
+}
+
+body.dark .summary-card.hadir {
+    background: #2d3e33;
+    color: #90ee90;
+}
+
+body.dark .summary-card.belum {
+    background: #5c2b2b;
+    color: #f28b82;
+}
+
+.summary-card div {
+    margin-top: 4px;
+    font-weight: normal;
+}
+/* ================= LOADING ================= */
+#absensiLoading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;               /* flex centering */
+    justify-content: center;     /* horizontal center */
+    align-items: center;         /* vertical center */
+    z-index: 2000;               /* selalu di atas */
+    backdrop-filter: blur(6px);  /* blur latar */
+    transition: opacity 0.25s ease;
+    opacity: 0;                  /* default hidden */
+    pointer-events: none;        /* tidak bisa diklik saat hidden */
+}
+
+#absensiLoading.show {
+    opacity: 1;
+    pointer-events: auto;        /* aktif saat tampil */
+}
+
+/* Konten loading (misal spinner atau teks) */
+#absensiLoading .loader-content {
+    color: #fff;
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Dark mode kompatibel (tetap sama karena background sudah gelap) */
+body.dark #absensiLoading {
+    background: rgba(0, 0, 0, 0.7);
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width:576px) {
+    .lapak-card {
+        font-size: 14px;
+        padding: 0.8rem;
+    }
+
+    .lapak-card .card-title {
+        font-size: 16px;
+    }
+
+    .lapak-card .card-text {
+        font-size: 13px;
+    }
+
+    .lapak-card .status-text {
+        font-size: 12px;
+    }
+
+    #absensiModal .modal-content {
+        max-width: 95%;
+        padding: 1rem;
+    }
+
+    .toggle-label {
+        width: 60px;
+        height: 30px;
+        font-size: 12px;
+    }
+
+    .toggle-ball {
+        width: 22px;
+        height: 22px;
+    }
+}
+
+@media (min-width:577px) and (max-width:991px) {
+    .lapak-card {
+        font-size: 15px;
+        padding: 1rem;
+    }
+
+    .lapak-card .card-title {
+        font-size: 18px;
+    }
+
+    .lapak-card .card-text {
+        font-size: 14px;
+    }
+
+    .lapak-card .status-text {
+        font-size: 13px;
+    }
+
+    #absensiModal .modal-content {
+        max-width: 80%;
+    }
+}
+
+@media (min-width:992px) {
+    .lapak-card {
+        font-size: 16px;
+        padding: 1.2rem;
+    }
+
+    .lapak-card .card-title {
+        font-size: 20px;
+    }
+
+    .lapak-card .card-text {
+        font-size: 15px;
+    }
+
+    .lapak-card .status-text {
+        font-size: 14px;
+    }
+
+    #absensiModal .modal-content {
+        max-width: 400px;
+    }
+}
+
+@media(max-width:768px) {
+    .summary-cards {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .summary-card {
+        width: 90%;
+        max-width: none;
+    }
+}

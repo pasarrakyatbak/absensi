@@ -1,0 +1,451 @@
+body {
+    background: linear-gradient(135deg, #fdfbfb, #ebedee);
+    font-family: 'Poppins', sans-serif;
+    color: #333;
+    transition: background 0.3s ease, color 0.3s ease;
+    margin: 0;
+    padding: 0;
+}
+
+body.dark {
+    background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+    color: #f1f1f1;
+}
+
+/* ================= Card umum ================= */
+.lapak-card {
+    cursor: pointer;
+    border-radius: 16px;
+    padding: 1rem;
+    backdrop-filter: blur(8px);
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.3s ease, border 0.3s ease, color 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Hover effect */
+.lapak-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.lapak-card.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+}
+
+/* Default teks dalam card */
+.lapak-card .card-title,
+.lapak-card .card-text,
+.lapak-card .status-text {
+    color: inherit;
+    transition: color 0.3s ease;
+}
+
+/* ================= Modal ================= */
+#absensiModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+#absensiModal .modal-content {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 1.5rem;
+    border-radius: 16px;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    transition: background 0.3s ease, color 0.3s ease, transform 0.25s ease;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+#absensiModal .modal-content:hover {
+    transform: scale(1.02);
+}
+
+body.dark #absensiModal .modal-content {
+    background: rgba(30, 30, 30, 0.95);
+    color: #f1f1f1;
+}
+
+/* ================= Loader ================= */
+#absensiLoading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    backdrop-filter: blur(6px);
+}
+
+/* ================= Sudah hadir ================= */
+.lapak-card.hadir {
+    background: rgba(212, 237, 218, 0.8);
+    border: 1px solid #c3e6cb;
+    color: #155724;
+}
+
+body.dark .lapak-card.hadir {
+    background: rgba(45, 62, 51, 0.8);
+    border: 1px solid #4caf50;
+    color: #90ee90;
+}
+
+/* ================= Belum hadir ================= */
+.lapak-card.belum {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid #ddd;
+    color: #333;
+}
+
+body.dark .lapak-card.belum {
+    background: rgba(30, 30, 30, 0.9);
+    border: 1px solid #444;
+    color: #f1f1f1;
+}
+
+/* ================= Toggle wrapper ================= */
+.dark-toggle {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin: 1rem;
+}
+
+/* Hidden checkbox */
+.dark-toggle input {
+    display: none;
+}
+
+/* Label sebagai saklar */
+.toggle-label {
+    background: #ddd;
+    border-radius: 50px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 70px;
+    height: 34px;
+    position: relative;
+    transition: background 0.3s ease;
+    padding: 0 8px;
+    font-size: 14px;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* Bulatan */
+.toggle-ball {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 26px;
+    height: 26px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.3s ease, background 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Ikon matahari 🌞 dan bulan 🌙 */
+.toggle-icon {
+    z-index: 2;
+}
+
+/* Aktif (dark mode) */
+.dark-toggle input:checked+.toggle-label {
+    background: #444;
+}
+
+.dark-toggle input:checked+.toggle-label .toggle-ball {
+    transform: translateX(36px);
+    background: #90ee90;
+}
+
+/* ================= Summary Cards ================= */
+.summary-cards {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.summary-card {
+    flex: 1 1 120px;
+    min-width: 120px;
+    padding: 1rem;
+    border-radius: 12px;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.summary-card.total {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.summary-card.hadir {
+    background: #d4edda;
+    color: #155724;
+}
+
+.summary-card.belum {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.summary-card div {
+    margin-top: 4px;
+    font-weight: normal;
+}
+
+.summary-progress .progress {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+body.dark .summary-progress .progress {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.progress-bar {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+}
+
+/* Dark mode */
+body.dark .summary-card.total {
+    background: #1e3a5f;
+    color: #90caf9;
+}
+
+body.dark .summary-card.hadir {
+    background: #2d3e33;
+    color: #90ee90;
+}
+
+body.dark .summary-card.belum {
+    background: #5c2b2b;
+    color: #f28b82;
+}
+
+/* ================= Modal Tombol ================= */
+#modalAbsenBtn {
+    width: 100%;
+    padding: 0.75rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 12px;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+#modalAbsenBtn:hover {
+    transform: scale(1.05);
+}
+
+/* Warna default hijau */
+#modalAbsenBtn {
+    background-color: #28a745;
+    color: #fff;
+    border: none;
+}
+
+body.modal-open {
+    overflow: hidden;
+    /* hentikan scroll saat modal aktif */
+}
+
+.container.blur {
+    filter: blur(6px);
+    transition: filter 0.25s ease;
+}
+
+/* Dark mode */
+body.dark #modalAbsenBtn {
+    background-color: #4caf50;
+    color: #fff;
+}
+
+/* Tombol tutup modal */
+#absensiModal .btn-secondary {
+    margin-top: 0.5rem;
+    width: 100%;
+}
+
+/* ================= Modal Animasi ================= */
+.modal-overlay {
+    display: none;
+    /* default hidden */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(6px);
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+    padding: 1rem;
+    box-sizing: border-box;
+
+    /* Animasi */
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.modal-overlay.show {
+    display: flex;
+    opacity: 1;
+}
+
+.modal-content {
+    background: rgba(255, 255, 255, 0.9);
+    padding: 1.5rem;
+    border-radius: 16px;
+    text-align: center;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    transform: scale(0.9);
+    transition: transform 0.25s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.modal-overlay.show .modal-content {
+    transform: scale(1);
+}
+
+/* Dark mode */
+body.dark .modal-content {
+    background: rgba(30, 30, 30, 0.95);
+    color: #f1f1f1;
+}
+
+/* ================= RESPONSIVE ================= */
+/* Responsive */
+@media (max-width: 576px) {
+    #modalAbsenBtn {
+        font-size: 1rem;
+        padding: 0.6rem;
+    }
+}
+
+@media (min-width: 577px) and (max-width: 991px) {
+    #modalAbsenBtn {
+        font-size: 1.05rem;
+    }
+}
+
+/* HP kecil (≤576px) */
+@media (max-width: 576px) {
+    .lapak-card {
+        font-size: 14px;
+        padding: 0.8rem;
+    }
+
+    .lapak-card .card-title {
+        font-size: 16px;
+    }
+
+    .lapak-card .card-text {
+        font-size: 13px;
+    }
+
+    .lapak-card .status-text {
+        font-size: 12px;
+    }
+
+    #absensiModal .modal-content {
+        max-width: 95%;
+        padding: 1rem;
+    }
+
+    .toggle-label {
+        width: 60px;
+        height: 30px;
+        font-size: 12px;
+    }
+
+    .toggle-ball {
+        width: 22px;
+        height: 22px;
+    }
+}
+
+/* Tablet (577px – 991px) */
+@media (min-width: 577px) and (max-width: 991px) {
+    .lapak-card {
+        font-size: 15px;
+        padding: 1rem;
+    }
+
+    .lapak-card .card-title {
+        font-size: 18px;
+    }
+
+    .lapak-card .card-text {
+        font-size: 14px;
+    }
+
+    .lapak-card .status-text {
+        font-size: 13px;
+    }
+
+    #absensiModal .modal-content {
+        max-width: 80%;
+    }
+}
+
+/* Desktop (≥992px) */
+@media (min-width: 992px) {
+    .lapak-card {
+        font-size: 16px;
+        padding: 1.2rem;
+    }
+
+    .lapak-card .card-title {
+        font-size: 20px;
+    }
+
+    .lapak-card .card-text {
+        font-size: 15px;
+    }
+
+    .lapak-card .status-text {
+        font-size: 14px;
+    }
+
+    #absensiModal .modal-content {
+        max-width: 400px;
+    }
+}
+
+/* ================= Responsive ================= */
+@media (max-width: 768px) {
+    .summary-cards {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .summary-card {
+        width: 90%;
+        max-width: none;
+    }
+}
