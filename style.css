@@ -185,7 +185,7 @@ body.dark .lapak-card.belum {
 .bg-danger {
     background-color: #dc3545;
     color: #fff;
-    padding: 4px 8px;
+    padding: 4px 5px;
     border-radius: 4px;
     display: inline-block;
     font-weight: 600;
@@ -464,7 +464,7 @@ body.dark .summary-progress .progress {
 .bg-danger {
     background-color: #dc3545;
     color: #fff;
-    padding: 1px 20px;
+    padding: 1px 12px;
     border-radius: 20px;
     font-size: 0.875rem;
     display: inline-block;
@@ -479,7 +479,7 @@ body.dark .bg-success {
 body.dark .bg-danger {
     background-color: #b23c3c;
     color: #fff;
-    padding: 1px 12px;
+    padding: 1px 8px;
     border-radius: 4px;
     display: inline-block;
     font-weight: 600;
