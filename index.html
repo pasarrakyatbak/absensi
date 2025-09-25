@@ -38,15 +38,26 @@
     </div>
 
     <!-- Modal Absensi -->
+    <!-- Modal Absensi -->
     <div id="absensiModal" class="modal-overlay">
         <div class="modal-content">
             <h5 id="absensiInfo"></h5>
-            <div id="modalStatusLabel" class="mb-3"></div> <!-- badge tampil di sini -->
+            <div id="modalStatusLabel" class="mb-3"></div> <!-- badge -->
+
+            <!-- Dropdown Kategori Absensi -->
+            <select id="absensiKategoriSelect" class="form-select mb-3">
+                <option value="berangkat" selected>Absensi Berangkat</option>
+                <option value="izin">Absensi Izin</option>
+            </select>
+
+            <!-- Tombol -->
             <button id="modalAbsenBtn" class="btn btn-success mb-2">Absen</button>
-            <button id="modalHapusBtn" class="btn btn-danger mb-2">Hapus Absensi</button>
+            <button id="modalIzinBtn" class="btn btn-primary mb-2 d-none">Izin</button>
+            <button id="modalHapusBtn" class="btn btn-danger mb-2">Hapus</button>
             <button class="btn btn-secondary" onclick="closeAbsensiModal()">Tutup</button>
         </div>
     </div>
+
 
 
     <!-- Loader -->
