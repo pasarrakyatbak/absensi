@@ -8,6 +8,9 @@ let absensiMingguan = false;
 let lastScrollY = 0;
 let currentPage = 1;
 const LAPAK_PER_PAGE = 10;
+const absensiKategoriSelect = document.getElementById("absensiKategoriSelect");
+const modalAbsenBtn = document.getElementById("modalAbsenBtn");
+const modalIzinBtn = document.getElementById("modalIzinBtn");
 
 // =================== Loader ===================
 function showAbsensiLoading(show, text = "Sedang menyimpan data...") {
@@ -81,7 +84,6 @@ function renderLapak(data) {
         return;
     }
 
-    // Pagination
     const totalPages = Math.ceil(data.length / LAPAK_PER_PAGE);
 
     if (lapakPageSelect) {
@@ -104,16 +106,30 @@ function renderLapak(data) {
     pageData.forEach(lapak => {
         const noLapak = lapak.noLapak || "-";
         const namaLapak = lapak.nama || "Tanpa Nama";
-        const hadir = String(lapak.statusAbsensi || "").toLowerCase().includes("hadir");
+        const status = String(lapak.statusAbsensi || "").toLowerCase();
+
+        let badgeText = "Belum Absen";
+        let badgeClass = "bg-danger";
+        let cardClass = "belum";
+
+        if (status.includes("hadir")) {
+            badgeText = "✅ Sudah Absen";
+            badgeClass = "bg-success";
+            cardClass = "hadir";
+        } else if (status.includes("izin")) {
+            badgeText = "📝 Izin";
+            badgeClass = "bg-warning";
+            cardClass = "izin";
+        }
 
         const card = document.createElement("div");
         card.className = "col-md-4 col-sm-6 mb-3";
         card.innerHTML = `
-            <div class="card lapak-card shadow-sm ${hadir ? 'hadir' : 'belum'}" 
+            <div class="card lapak-card shadow-sm ${cardClass}" 
                  data-no-lapak="${noLapak}" data-nama-lapak="${namaLapak}">
                 
-                <span class="lapak-badge ${hadir ? 'bg-success' : 'bg-danger'}">
-                    ${hadir ? 'Sudah Absen' : 'Belum Absen'}
+                <span class="lapak-badge ${badgeClass}">
+                    ${badgeText}
                 </span>
 
                 <div class="card-body text-center">
@@ -138,6 +154,20 @@ if (lapakPageSelect) {
         renderLapak(lapakData);
     });
 }
+function animateBadgeChange(badgeEl, newHTML) {
+    if (!badgeEl) return;
+
+    // Buat animasi fade out → ganti content → fade in
+    badgeEl.style.transition = "transform 0.2s ease, opacity 0.2s ease";
+    badgeEl.style.opacity = "0";
+    badgeEl.style.transform = "scale(0.8)";
+
+    setTimeout(() => {
+        badgeEl.innerHTML = newHTML;
+        badgeEl.style.opacity = "1";
+        badgeEl.style.transform = "scale(1)";
+    }, 200);
+}
 
 // =================== Modal ===================
 function openAbsensiModal(noLapak, namaLapak) {
@@ -149,19 +179,41 @@ function openAbsensiModal(noLapak, namaLapak) {
     if (!modal || !info || !container || !statusLabel) return;
 
     const lapak = lapakData.find(l => String(l.noLapak) === String(noLapak));
-    const hadir = String(lapak?.statusAbsensi || "").toLowerCase().includes("hadir");
+    const status = String(lapak?.statusAbsensi || "").toLowerCase();
 
     info.textContent = `Absen untuk Lapak ${noLapak} - ${namaLapak}`;
-    statusLabel.innerHTML = hadir
-        ? '<span class="badge bg-success">Sudah Absen</span>'
-        : '<span class="badge bg-danger">Belum Absen</span>';
+
+    let badgeHTML = '<span class="badge bg-danger">Belum Absen</span>';
+    if (status.includes("hadir")) badgeHTML = '<span class="badge bg-success">Sudah Absen</span>';
+    else if (status.includes("izin")) badgeHTML = '<span class="badge bg-warning">Izin</span>';
+
+    statusLabel.innerHTML = badgeHTML;
 
     container.classList.add("blur");
     document.body.classList.add("modal-open");
     modal.style.display = "flex";
     setTimeout(() => modal.classList.add("show"), 10);
+
+    updateModalButtons(); // <-- update tombol sesuai status
     updateBlurOnScroll();
 }
+if (absensiKategoriSelect) {
+    absensiKategoriSelect.addEventListener("change", () => {
+        updateModalButtons(); // otomatis cek status lapak saat kategori ganti
+    });
+}
+if (modalAbsenBtn) modalAbsenBtn.addEventListener("click", async () => {
+    if (!currentLapakId) return;
+
+    const lapak = lapakData.find(l => String(l.noLapak) === String(currentLapakId));
+    if (String(lapak?.statusAbsensi || "").toLowerCase().includes("izin")) {
+        showToast("Lapak ini sudah melakukan izin, tidak bisa absen.", "error");
+        return;
+    }
+
+    await absenLapak(currentLapakId);
+    closeAbsensiModal();
+});
 
 function closeAbsensiModal() {
     const modal = document.getElementById("absensiModal");
@@ -176,7 +228,49 @@ function closeAbsensiModal() {
     setTimeout(() => { if (!modal.classList.contains("show")) modal.style.display = "none"; }, 250);
     lastScrollY = 0;
 }
+function updateModalButtons() {
+    if (!currentLapakId) return;
 
+    const lapak = lapakData.find(l => String(l.noLapak) === String(currentLapakId));
+    const status = String(lapak?.statusAbsensi || "").toLowerCase();
+    const kategori = absensiKategoriSelect?.value || "berangkat";
+
+    if (kategori === "berangkat") {
+        // Jika sudah izin, tombol absen dinonaktifkan
+        if (status.includes("izin")) {
+            modalAbsenBtn.disabled = true;
+            modalAbsenBtn.title = "Lapak ini sudah melakukan izin, tidak bisa absen";
+        } else {
+            modalAbsenBtn.disabled = false;
+            modalAbsenBtn.title = "";
+        }
+
+        modalAbsenBtn.classList.remove("d-none");
+        modalIzinBtn.classList.add("d-none");
+    } else if (kategori === "izin") {
+        modalIzinBtn.classList.remove("d-none");
+        modalAbsenBtn.classList.add("d-none");
+    }
+}
+function updateModalStatusLabel() {
+    const statusLabel = document.getElementById("modalStatusLabel");
+    if (!statusLabel || !currentLapakId) return;
+
+    const lapak = lapakData.find(l => String(l.noLapak) === String(currentLapakId));
+    const kategori = absensiKategoriSelect?.value || "berangkat";
+    let status = String(lapak?.statusAbsensi || "").toLowerCase();
+
+    let badgeHTML = '<span class="badge bg-danger">Belum Absen</span>';
+    if (kategori === "berangkat") {
+        if (status.includes("hadir")) badgeHTML = '<span class="badge bg-success">Sudah Absen</span>';
+        else if (status.includes("izin")) badgeHTML = '<span class="badge bg-warning">Izin</span>';
+    } else if (kategori === "izin") {
+        if (status.includes("izin")) badgeHTML = '<span class="badge bg-warning">Izin</span>';
+        else if (status.includes("hadir")) badgeHTML = '<span class="badge bg-success">Sudah Absen</span>';
+    }
+
+    animateBadgeChange(statusLabel, badgeHTML);
+}
 // =================== Absen & Hapus Absensi ===================
 async function absenLapak(noLapak) {
     showAbsensiLoading(true, "Menyimpan absensi...");
@@ -194,6 +288,7 @@ async function absenLapak(noLapak) {
             renderLapak(lapakData);
             updateSummary();
             updateAbsensiInfo();
+            updateModalStatusLabel(); // badge animasi
             showToast(`Absensi Lapak ${noLapak} berhasil disimpan.`, "success");
         }
     } catch {
@@ -201,7 +296,6 @@ async function absenLapak(noLapak) {
     }
     showAbsensiLoading(false);
 }
-
 async function hapusAbsensiLapak(noLapak) {
     showAbsensiLoading(true, "Menghapus absensi...");
     try {
@@ -214,20 +308,47 @@ async function hapusAbsensiLapak(noLapak) {
         if (!json.success) showToast(json.message || "Gagal menghapus absensi.", "error");
         else {
             const lapakIndex = lapakData.findIndex(l => String(l.noLapak) === String(noLapak));
-            if (lapakIndex > -1) lapakData[lapakIndex].statusAbsensi = "❌ Belum";
+            if (lapakIndex > -1) lapakData[lapakIndex].statusAbsensi = "Belum";
             renderLapak(lapakData);
             updateSummary();
             updateAbsensiInfo();
-            showToast(json.message || `Absensi Lapak ${noLapak} berhasil dihapus.`, "success");
+            updateModalStatusLabel(); // badge animasi
+            showToast(`Absensi Lapak ${noLapak} berhasil dihapus.`, "success");
         }
-    } catch {
+    } catch (err) {
+        console.error(err);
         showToast("Terjadi kesalahan saat menghapus absensi.", "error");
     }
     showAbsensiLoading(false);
 }
 
+async function hapusIzinLapak(noLapak) {
+    showAbsensiLoading(true, "Menghapus izin...");
+    try {
+        const res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({ action: "hapusIzin", noLapak, password: "panitia123" })
+        });
+        const json = await res.json();
+        if (!json.success) showToast(json.message || "Gagal menghapus izin.", "error");
+        else {
+            const lapakIndex = lapakData.findIndex(l => String(l.noLapak) === String(noLapak));
+            if (lapakIndex > -1) lapakData[lapakIndex].statusAbsensi = "Belum";
+            renderLapak(lapakData);
+            updateSummary();
+            updateAbsensiInfo();
+            updateModalStatusLabel(); // badge animasi
+            showToast(`Izin Lapak ${noLapak} berhasil dihapus.`, "success");
+        }
+    } catch (err) {
+        console.error(err);
+        showToast("Terjadi kesalahan saat menghapus izin.", "error");
+    }
+    showAbsensiLoading(false);
+}
+
 // =================== Modal Buttons ===================
-const modalAbsenBtn = document.getElementById("modalAbsenBtn");
 if (modalAbsenBtn) modalAbsenBtn.addEventListener("click", async () => {
     if (!currentLapakId) return;
     await absenLapak(currentLapakId);
@@ -240,17 +361,20 @@ if (modalHapusBtn) modalHapusBtn.addEventListener("click", async () => {
 
     const lapak = lapakData.find(l => String(l.noLapak) === String(currentLapakId));
     const namaLapak = lapak?.nama || "Tanpa Nama";
+    const kategori = absensiKategoriSelect?.value || "berangkat"; // default berangkat
+
+    const actionText = kategori === "berangkat" ? "absensi" : "izin";
 
     const result = await Swal.fire({
-        title: 'Konfirmasi Hapus Absensi',
+        title: `Konfirmasi Hapus ${actionText.charAt(0).toUpperCase() + actionText.slice(1)}`,
         html: `
-            Kamu akan menghapus absensi untuk:<br><br>
+            Kamu akan menghapus ${actionText} untuk:<br><br>
             <strong>Lapak ${currentLapakId} - ${namaLapak}</strong><br><br>
-            Absensi bisa ditambahkan kembali nanti jika diperlukan.
+            ${actionText.charAt(0).toUpperCase() + actionText.slice(1)} bisa ditambahkan kembali nanti jika diperlukan.
         `,
         icon: 'warning',
         showCancelButton: true,
-        confirmButtonText: 'Hapus Absensi',
+        confirmButtonText: `Hapus ${actionText}`,
         cancelButtonText: 'Batal',
         customClass: {
             confirmButton: 'btn btn-danger mx-2',
@@ -260,7 +384,8 @@ if (modalHapusBtn) modalHapusBtn.addEventListener("click", async () => {
     });
 
     if (result.isConfirmed) {
-        await hapusAbsensiLapak(currentLapakId);
+        if (kategori === "berangkat") await hapusAbsensiLapak(currentLapakId);
+        else if (kategori === "izin") await hapusIzinLapak(currentLapakId);
         closeAbsensiModal();
     }
 });
@@ -280,28 +405,63 @@ darkSwitch.addEventListener("change", () => {
 function updateAbsensiInfo() {
     const banner = document.getElementById("absensiInfoBanner");
     if (!banner) return;
-    const totalLapak = lapakData.length;
-    const totalHadir = lapakData.filter(l => String(l.statusAbsensi || "").toLowerCase().includes("hadir")).length;
 
-    if (totalLapak > 0 && totalLapak === totalHadir) {
+    const total = lapakData.length;
+    const totalHadir = lapakData.filter(l => String(l.statusAbsensi || "").toLowerCase().includes("hadir")).length;
+    const totalIzin = lapakData.filter(l => String(l.statusAbsensi || "").toLowerCase().includes("izin")).length;
+    const totalBelum = total - totalHadir - totalIzin;
+
+    if (total > 0 && totalBelum === 0) {
         banner.style.display = "none";
         return;
     }
 
     banner.style.display = "block";
     banner.className = "alert alert-info text-center mb-3";
-    banner.textContent = absensiMingguan
-        ? "ℹ️ Absensi bisa dilakukan setiap MINGGU."
-        : "ℹ️ Absensi bisa dilakukan setiap HARI.";
+    banner.innerHTML = `
+        ℹ️ Status Absensi Hari Ini: 
+        ✅ Hadir: ${totalHadir} | 
+        📝 Izin: ${totalIzin} | 
+        ❌ Belum: ${totalBelum}.
+        ${absensiMingguan ? "<br>Absensi bisa dilakukan setiap MINGGU." : "<br>Absensi bisa dilakukan setiap HARI."}
+    `;
 }
+//update kategori
+if (absensiKategoriSelect) {
+    absensiKategoriSelect.addEventListener("change", () => {
+        const kategori = absensiKategoriSelect.value;
+        if (kategori === "berangkat") {
+            modalAbsenBtn.classList.remove("d-none");
+            modalIzinBtn.classList.add("d-none");
+        } else {
+            modalAbsenBtn.classList.add("d-none");
+            modalIzinBtn.classList.remove("d-none");
+        }
+    });
+}
+
+if (modalAbsenBtn) modalAbsenBtn.addEventListener("click", async () => {
+    if (!currentLapakId) return;
+    await absenLapak(currentLapakId);
+    closeAbsensiModal();
+});
+
+if (modalIzinBtn) modalIzinBtn.addEventListener("click", async () => {
+    if (!currentLapakId) return;
+    await izinLapak(currentLapakId);
+    closeAbsensiModal();
+});
 
 // =================== Summary ===================
 function updateSummary() {
     const total = lapakData.length;
     const totalHadir = lapakData.filter(l => String(l.statusAbsensi || "").toLowerCase().includes("hadir")).length;
-    const totalBelum = total - totalHadir;
+    const totalIzin = lapakData.filter(l => String(l.statusAbsensi || "").toLowerCase().includes("izin")).length;
+    const totalBelum = total - totalHadir - totalIzin;
+
     const persenHadir = total > 0 ? Math.round((totalHadir / total) * 100) : 0;
-    const persenBelum = 100 - persenHadir;
+    const persenIzin = total > 0 ? Math.round((totalIzin / total) * 100) : 0;
+    const persenBelum = 100 - persenHadir - persenIzin;
 
     const summaryEl = document.getElementById("lapakSummary");
     if (!summaryEl) return;
@@ -316,6 +476,11 @@ function updateSummary() {
             <div class="value">${totalHadir}</div>
             <div class="extra">(${persenHadir}%)</div>
         </div>
+        <div class="summary-card izin">
+            <div class="label">📝 Izin</div>
+            <div class="value">${totalIzin}</div>
+            <div class="extra">(${persenIzin}%)</div>
+        </div>
         <div class="summary-card belum">
             <div class="label">❌ Belum</div>
             <div class="value">${totalBelum}</div>
@@ -323,16 +488,9 @@ function updateSummary() {
         </div>
         <div class="summary-progress mt-3">
             <div class="progress" style="height: 20px; border-radius: 10px; overflow: hidden;">
-                <div class="progress-bar bg-success" role="progressbar"
-                    style="width: ${persenHadir}%"
-                    aria-valuenow="${persenHadir}" aria-valuemin="0" aria-valuemax="100">
-                    ${persenHadir > 15 ? persenHadir + "%" : ""}
-                </div>
-                <div class="progress-bar bg-danger" role="progressbar"
-                    style="width: ${persenBelum}%"
-                    aria-valuenow="${persenBelum}" aria-valuemin="0" aria-valuemax="100">
-                    ${persenBelum > 15 ? persenBelum + "%" : ""}
-                </div>
+                <div class="progress-bar bg-success" style="width: ${persenHadir}%">${persenHadir > 15 ? persenHadir + "%" : ""}</div>
+                <div class="progress-bar bg-warning" style="width: ${persenIzin}%">${persenIzin > 15 ? persenIzin + "%" : ""}</div>
+                <div class="progress-bar bg-danger" style="width: ${persenBelum}%">${persenBelum > 15 ? persenBelum + "%" : ""}</div>
             </div>
         </div>
     `;
@@ -375,6 +533,30 @@ if (searchInput) {
             if (lapakPageSelect) lapakPageSelect.innerHTML = "";
         }
     });
+}
+async function izinLapak(noLapak) {
+    showAbsensiLoading(true, "Menyimpan izin...");
+    try {
+        const res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({ action: "izin", noLapak, password: "panitia123" })
+        });
+        const json = await res.json();
+        if (!json.success) showToast(json.message || "Gagal menyimpan izin.", "error");
+        else {
+            const lapakIndex = lapakData.findIndex(l => String(l.noLapak) === String(noLapak));
+            if (lapakIndex > -1) lapakData[lapakIndex].statusAbsensi = "📝 Izin";
+            renderLapak(lapakData);
+            updateSummary();
+            updateAbsensiInfo();
+            updateModalStatusLabel(); // badge animasi
+            showToast(`Izin Lapak ${noLapak} berhasil disimpan.`, "success");
+        }
+    } catch {
+        showToast("Terjadi kesalahan saat menyimpan izin.", "error");
+    }
+    showAbsensiLoading(false);
 }
 
 // =================== Load pertama kali ===================
