@@ -543,6 +543,24 @@ body.dark .bg-danger {
     margin-left: 8px;
 }
 
+/* Lapak Izin (Light Mode) */
+.lapak-card.izin {
+    background-color: #fff3cd;
+    /* kuning lembut */
+    border: 1px solid #ffeeba;
+    color: #212529;
+    /* teks hitam */
+}
+
+/* Dark Mode */
+body.dark .lapak-card.izin {
+    background: rgba(255, 193, 7, 0.2);
+    /* kuning transparan */
+    border: 1px solid #ffc107;
+    color: #ffeb3b;
+    /* teks kuning terang */
+}
+
 /* ================= RESPONSIVE ================= */
 /* HP kecil (≤576px) */
 @media (max-width:576px) {
