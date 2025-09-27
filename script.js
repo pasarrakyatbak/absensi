@@ -377,7 +377,7 @@ function updateAbsensiInfo() {
         ℹ️ Status Absensi Hari Ini: 
         ✅ Hadir: ${totalHadir} | 
         📝 Izin: ${totalIzin} | 
-        ❌ Belum: ${totalBelum}.
+        ❌ Tidak Hadir: ${totalBelum}.
         ${absensiMingguan ? "<br>Absensi bisa dilakukan setiap MINGGU." : "<br>Absensi bisa dilakukan setiap HARI."}
     `;
 }
