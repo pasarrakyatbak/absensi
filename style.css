@@ -485,17 +485,19 @@ body.dark .bg-danger {
     font-weight: 600;
 }
 
-/* ================= TOAST (POJOK KANAN BAWAH) ================= */
+/* ================= TOAST ================= */
+/* ================= TOAST TENGAH ================= */
 .toast-container {
     position: fixed;
-    bottom: 1.5rem;
-    right: 1.5rem;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     z-index: 3000;
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
-    gap: 0.75rem;
-    pointer-events: none; /* supaya tidak menghalangi klik elemen lain */
+    gap: 0.5rem;
+    pointer-events: none;
+    /* agar tidak menghalangi klik */
 }
 
 .toast {
@@ -508,20 +510,17 @@ body.dark .bg-danger {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
     display: flex;
     justify-content: space-between;
-    align-items: center;
     opacity: 0;
-    transform: translateX(100%) scale(0.95);
+    transform: scale(0.9);
     transition: all 0.4s ease;
     pointer-events: auto;
 }
 
-/* Saat toast muncul */
 .toast.show {
     opacity: 1;
-    transform: translateX(0) scale(1);
+    transform: scale(1);
 }
 
-/* Warna berdasarkan tipe toast */
 .toast-success {
     background: #28a745;
 }
@@ -534,7 +533,6 @@ body.dark .bg-danger {
     background: #1976d2;
 }
 
-/* Tombol close di dalam toast */
 .toast-close {
     cursor: pointer;
     font-weight: bold;
@@ -543,11 +541,6 @@ body.dark .bg-danger {
     color: #fff;
     font-size: 1.2rem;
     margin-left: 8px;
-    transition: opacity 0.3s;
-}
-
-.toast-close:hover {
-    opacity: 0.7;
 }
 
 /* Lapak Izin (Light Mode) */
@@ -663,87 +656,5 @@ body.dark .lapak-card.izin {
     .summary-card {
         width: 90%;
         max-width: none;
-    }
-}
-
-
-/* ================= FITUR ABSENSI MASSAL ================= */
-#absenSemuaBtn,
-#periksaBtn {
-    display: block;
-    width: 100%;
-    padding: 0.9rem 1rem;
-    font-size: 1rem;
-    font-weight: 600;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    margin: 0.4rem 0;
-}
-
-/* Warna Light Mode */
-#absenSemuaBtn {
-    background: #007bff;
-    color: #fff;
-    box-shadow: 0 3px 10px rgba(0, 123, 255, 0.25);
-}
-
-#periksaBtn {
-    background: #ffc107;
-    color: #333;
-    box-shadow: 0 3px 10px rgba(255, 193, 7, 0.25);
-}
-
-/* Hover effect */
-#absenSemuaBtn:hover {
-    transform: scale(1.02);
-    background: #0069d9;
-}
-
-#periksaBtn:hover {
-    transform: scale(1.02);
-    background: #e0a800;
-}
-
-/* Dark Mode */
-body.dark #absenSemuaBtn {
-    background: #2196f3;
-    color: #fff;
-    box-shadow: 0 3px 10px rgba(33, 150, 243, 0.3);
-}
-
-body.dark #periksaBtn {
-    background: #ffb300;
-    color: #212121;
-    box-shadow: 0 3px 10px rgba(255, 179, 0, 0.3);
-}
-
-/* ================= RESPONSIVE BUTTON ================= */
-@media (max-width: 576px) {
-    #absenSemuaBtn,
-    #periksaBtn {
-        font-size: 0.9rem;
-        padding: 0.75rem;
-        border-radius: 10px;
-        margin: 0.3rem 0;
-    }
-}
-
-@media (min-width: 577px) and (max-width: 991px) {
-    #absenSemuaBtn,
-    #periksaBtn {
-        font-size: 1rem;
-        padding: 0.85rem;
-        border-radius: 10px;
-    }
-}
-
-@media (min-width: 992px) {
-    #absenSemuaBtn,
-    #periksaBtn {
-        width: 300px;
-        margin: 0.4rem auto;
-        font-size: 1.05rem;
     }
 }
