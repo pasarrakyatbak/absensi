@@ -502,6 +502,7 @@ async function startAbsensiOtomatis() {
 
     showAbsensiLoading(false);
 }
+document.getElementById("absenOtomatisBtn")?.addEventListener("click", startAbsensiOtomatis);
 
 // =================== Inisialisasi ===================
 document.addEventListener("DOMContentLoaded", loadLapak);
