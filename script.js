@@ -90,19 +90,30 @@ function renderLapak(data) {
     }
 
     const totalPages = Math.ceil(data.length / LAPAK_PER_PAGE);
+const GROUP_PER_DROPDOWN = 20; // tampilkan 20 halaman per opsi dropdown (1 opsi = 200 lapak)
 
-    if (lapakPageSelect) {
-        lapakPageSelect.innerHTML = "";
-        for (let i = 1; i <= totalPages; i++) {
-            const start = (i - 1) * LAPAK_PER_PAGE + 1;
-            const end = Math.min(i * LAPAK_PER_PAGE, data.length);
-            const option = document.createElement("option");
-            option.value = i;
-            option.textContent = `${start} - ${end}`;
-            if (i === currentPage) option.selected = true;
-            lapakPageSelect.appendChild(option);
-        }
+if (lapakPageSelect) {
+    lapakPageSelect.innerHTML = "";
+    const totalGroups = Math.ceil(totalPages / GROUP_PER_DROPDOWN);
+
+    for (let g = 1; g <= totalGroups; g++) {
+        const startPage = (g - 1) * GROUP_PER_DROPDOWN + 1;
+        const endPage = Math.min(g * GROUP_PER_DROPDOWN, totalPages);
+
+        const startLapak = (startPage - 1) * LAPAK_PER_PAGE + 1;
+        const endLapak = Math.min(endPage * LAPAK_PER_PAGE, data.length);
+
+        const option = document.createElement("option");
+        option.value = startPage; // nilai acuan adalah halaman pertama di kelompok itu
+        option.textContent = `Halaman ${startPage}-${endPage} (${startLapak}-${endLapak})`;
+
+        // tandai grup yang sedang aktif
+        if (currentPage >= startPage && currentPage <= endPage) option.selected = true;
+
+        lapakPageSelect.appendChild(option);
     }
+}
+
 
     const startIndex = (currentPage - 1) * LAPAK_PER_PAGE;
     const endIndex = startIndex + LAPAK_PER_PAGE;
