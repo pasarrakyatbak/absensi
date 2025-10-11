@@ -521,10 +521,30 @@ absenSemuaBtn.addEventListener("click", async () => {
 // === FITUR 2: PERIKSA LAPAK TIDAK HADIR ===
 periksaBtn.addEventListener("click", () => {
     const currentLapaks = getCurrentPageLapak();
+
+    // Filter lapak yang belum absen atau tidak hadir
     const belumAbsen = currentLapaks.filter(l => {
         const status = String(l.statusAbsensi || "").toLowerCase();
-        return status === "" || status === "tidak hadir" || status === "alpha";
+        return (
+            status === "" ||
+            status.includes("belum") ||
+            status.includes("tidak hadir") ||
+            status.includes("alpha")
+        );
     });
+
+    // === Tampilkan hasil ===
+    if (belumAbsen.length === 0) {
+        showToast("Semua lapak sudah absen ✅", "success");
+    } else {
+        const listLapak = belumAbsen.map(l => `• ${l.namaLapak}`).join("<br>");
+        showToast(
+            `Lapak yang belum absen/tidak hadir:<br>${listLapak}`,
+            "warning",
+            6000
+        );
+    }
+});
 
     if (!belumAbsen.length) {
         Swal.fire({
