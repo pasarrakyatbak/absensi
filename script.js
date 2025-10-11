@@ -88,21 +88,21 @@ function renderLapak(data) {
         if (lapakPageSelect) lapakPageSelect.innerHTML = "";
         return;
     }
-const totalPages = Math.ceil(data.length / LAPAK_PER_PAGE);
 
-if (lapakPageSelect) {
-    lapakPageSelect.innerHTML = "";
-    for (let i = 1; i <= totalPages; i++) {
-        const start = (i - 1) * LAPAK_PER_PAGE + 1;
-        const end = Math.min(i * LAPAK_PER_PAGE, data.length);
-        const option = document.createElement("option");
-        option.value = i;
-        option.textContent = `${start} - ${end}`;
-        if (i === currentPage) option.selected = true;
-        lapakPageSelect.appendChild(option);
+    const totalPages = Math.ceil(data.length / LAPAK_PER_PAGE);
+
+    if (lapakPageSelect) {
+        lapakPageSelect.innerHTML = "";
+        for (let i = 1; i <= totalPages; i++) {
+            const start = (i - 1) * LAPAK_PER_PAGE + 1;
+            const end = Math.min(i * LAPAK_PER_PAGE, data.length);
+            const option = document.createElement("option");
+            option.value = i;
+            option.textContent = `${start} - ${end}`;
+            if (i === currentPage) option.selected = true;
+            lapakPageSelect.appendChild(option);
+        }
     }
-}
-
 
     const startIndex = (currentPage - 1) * LAPAK_PER_PAGE;
     const endIndex = startIndex + LAPAK_PER_PAGE;
@@ -450,60 +450,6 @@ style.innerHTML = `
 .lapak-card.izin { border: 2px solid #FFD966; }
 `;
 document.head.appendChild(style);
-
-// =============================================
-// FITUR TAMBAHAN: ABSENSI OTOMATIS PER 20 HALAMAN (DENGAN PASSWORD)
-// =============================================
-
-async function startAbsensiOtomatis() {
-    let page = 1;
-    let selesai = false;
-
-    showAbsensiLoading(true, "Memulai absensi otomatis...");
-
-    while (!selesai) {
-        try {
-            const res = await fetch(API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: new URLSearchParams({
-                    action: "absenOtomatisBatch",
-                    page,
-                    password: "panitia123" // ← tambahkan password di sini
-                })
-            });
-
-            const json = await res.json();
-            console.log("Batch Result:", json);
-
-            if (!json.success) {
-                showToast(json.message || "Gagal menjalankan absensi otomatis", "error");
-                break;
-            }
-
-            // tampilkan hasil tiap batch
-            showToast(json.message, "success", 4000);
-
-            if (json.done) {
-                selesai = true;
-                showAbsensiLoading(false);
-                showToast("✅ Semua halaman sudah selesai diproses!", "success", 4000);
-                await loadLapak(); // refresh data absensi di UI
-            } else {
-                page++;
-                await new Promise(resolve => setTimeout(resolve, 1500)); // jeda antar halaman
-            }
-
-        } catch (err) {
-            console.error(err);
-            showToast("⚠️ Terjadi error koneksi: " + err.message, "error");
-            break;
-        }
-    }
-
-    showAbsensiLoading(false);
-}
-document.getElementById("absenOtomatisBtn")?.addEventListener("click", startAbsensiOtomatis);
 
 // =================== Inisialisasi ===================
 document.addEventListener("DOMContentLoaded", loadLapak);
