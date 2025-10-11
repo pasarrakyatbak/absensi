@@ -451,125 +451,57 @@ style.innerHTML = `
 `;
 document.head.appendChild(style);
 
-// =================== FITUR ABSENSI MASSAL PER HALAMAN ===================
-const absenSemuaBtn = document.createElement("button");
-absenSemuaBtn.id = "absenSemuaBtn";
-absenSemuaBtn.className = "btn btn-primary my-2 w-100";
-absenSemuaBtn.textContent = "✅ Absen Semua di Halaman Ini";
+// =============================================
+// FITUR TAMBAHAN: ABSENSI OTOMATIS PER 20 HALAMAN (TANPA PASSWORD)
+// =============================================
 
-const periksaBtn = document.createElement("button");
-periksaBtn.id = "periksaBtn";
-periksaBtn.className = "btn btn-warning my-2 w-100";
-periksaBtn.textContent = "🔍 Periksa Tidak Hadir di Halaman Ini";
+async function startAbsensiOtomatis() {
+    let page = 1;
+    let selesai = false;
 
-const headerContainer = document.querySelector(".sticky-header") || document.body;
-headerContainer.appendChild(absenSemuaBtn);
-headerContainer.appendChild(periksaBtn);
+    showAbsensiLoading(true, "Memulai absensi otomatis...");
 
-// === FUNGSI: Ambil data lapak di halaman aktif ===
-function getCurrentPageLapak() {
-    const startIndex = (currentPage - 1) * LAPAK_PER_PAGE;
-    const endIndex = startIndex + LAPAK_PER_PAGE;
-    return lapakData.slice(startIndex, endIndex);
-}
+    while (!selesai) {
+        try {
+            const res = await fetch(API_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({
+                    action: "absenOtomatisBatch",
+                    page
+                })
+            });
 
-// === FITUR 1: ABSEN MASSAL (abaikan izin) ===
-absenSemuaBtn.addEventListener("click", async () => {
-    const currentLapaks = getCurrentPageLapak();
+            const json = await res.json();
+            console.log("Batch Result:", json);
 
-    // Hanya yang belum absen dan bukan izin
-    const belumAbsen = currentLapaks.filter(l => {
-        const status = String(l.statusAbsensi || "").toLowerCase();
-        return status === "" || status === "tidak hadir" || status === "alpha";
-    });
+            if (!json.success) {
+                showToast(json.message || "Gagal menjalankan absensi otomatis", "error");
+                break;
+            }
 
-    if (!belumAbsen.length) {
-        showToast("Semua lapak di halaman ini sudah absen atau izin.", "info");
-        return;
-    }
+            // tampilkan hasil tiap batch
+            showToast(json.message, "success", 4000);
 
-    const konfirmasi = await Swal.fire({
-        title: "Konfirmasi Absensi Massal",
-        html: `
-            Akan melakukan absensi otomatis untuk <strong>${belumAbsen.length}</strong> lapak di halaman ini.<br>
-            (Lapak dengan status <b>Izin</b> tidak akan diubah)
-        `,
-        icon: "question",
-        showCancelButton: true,
-        confirmButtonText: "Ya, Absen Semua",
-        cancelButtonText: "Batal",
-        customClass: {
-            confirmButton: "btn btn-success mx-2",
-            cancelButton: "btn btn-secondary mx-2"
-        },
-        buttonsStyling: false
-    });
+            if (json.done) {
+                selesai = true;
+                showAbsensiLoading(false);
+                showToast("✅ Semua halaman sudah selesai diproses!", "success", 4000);
+                await loadLapak(); // refresh data absensi di UI
+            } else {
+                page++;
+                await new Promise(resolve => setTimeout(resolve, 1500)); // jeda antar halaman
+            }
 
-    if (!konfirmasi.isConfirmed) return;
-
-    showAbsensiLoading(true, "Sedang melakukan absensi massal...");
-
-    for (const lapak of belumAbsen) {
-        await absenLapak(lapak.noLapak);
-        await new Promise(r => setTimeout(r, 300)); // jeda untuk hindari overload server
+        } catch (err) {
+            console.error(err);
+            showToast("⚠️ Terjadi error koneksi: " + err.message, "error");
+            break;
+        }
     }
 
     showAbsensiLoading(false);
-    showToast(`✅ ${belumAbsen.length} lapak berhasil diabsen otomatis.`, "success");
-});
-
-// === FITUR 2: PERIKSA LAPAK TIDAK HADIR ===
-periksaBtn.addEventListener("click", () => {
-    const currentLapaks = getCurrentPageLapak();
-
-    // Filter lapak yang belum absen atau tidak hadir
-    const belumAbsen = currentLapaks.filter(l => {
-        const status = String(l.statusAbsensi || "").toLowerCase();
-        return (
-            status === "" ||
-            status.includes("belum") ||
-            status.includes("tidak hadir") ||
-            status.includes("alpha")
-        );
-    });
-
-    // === Tampilkan hasil ===
-    if (belumAbsen.length === 0) {
-        showToast("Semua lapak sudah absen ✅", "success");
-    } else {
-        const listLapak = belumAbsen.map(l => `• ${l.namaLapak}`).join("<br>");
-        showToast(
-            `Lapak yang belum absen/tidak hadir:<br>${listLapak}`,
-            "warning",
-            6000
-        );
-    }
-});
-
-    if (!belumAbsen.length) {
-        Swal.fire({
-            title: "Semua Hadir atau Izin ✅",
-            text: "Tidak ada lapak yang belum absen di halaman ini.",
-            icon: "success",
-            confirmButtonText: "Oke"
-        });
-        return;
-    }
-
-    const listHTML = belumAbsen.map(
-        l => `<li><strong>Lapak ${l.noLapak}</strong> - ${l.nama || "Tanpa Nama"}</li>`
-    ).join("");
-
-    Swal.fire({
-        title: "❌ Lapak Belum Absen",
-        html: `
-            <p>Ditemukan <strong>${belumAbsen.length}</strong> lapak yang belum absen di halaman ini:</p>
-            <ul style="text-align:left;max-height:200px;overflow-y:auto;">${listHTML}</ul>
-        `,
-        icon: "warning",
-        confirmButtonText: "Tutup"
-    });
-});
+}
 
 // =================== Inisialisasi ===================
 document.addEventListener("DOMContentLoaded", loadLapak);
