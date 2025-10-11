@@ -11,62 +11,38 @@
 
 <body class="p-3">
     <!-- Toggle Dark Mode -->
-    <div class="dark-toggle mb-3 text-center">
+    <div class="dark-toggle mb-3">
         <input type="checkbox" id="darkSwitch">
-        <label for="darkSwitch" class="toggle-label d-inline-flex align-items-center justify-content-center">
-            <span class="toggle-icon me-2">🌞</span>
+        <label for="darkSwitch" class="toggle-label">
+            <span class="toggle-icon">🌞</span>
             <span class="toggle-ball"></span>
-            <span class="toggle-icon ms-2">🌙</span>
+            <span class="toggle-icon">🌙</span>
         </label>
     </div>
 
     <div class="container">
+
         <!-- Ringkasan -->
-        <div id="lapakSummary" class="summary-cards mb-4 row g-3 justify-content-center"></div>
+        <div id="lapakSummary" class="summary-cards mb-4"></div>
 
         <!-- Info Banner -->
-        <div id="absensiInfoBanner" class="alert text-center mb-3 d-none"></div>
-
+        <div id="absensiInfoBanner" class="alert text-center mb-3"></div>
         <!-- Judul & Search -->
-        <h2 class="mb-3 text-center fw-semibold">Absensi Lapak Hari Ini</h2>
-
-        <!-- Tombol Absensi Otomatis -->
-        <div class="text-center mb-4">
-            <button id="absenOtomatisBtn" class="btn btn-warning fw-semibold shadow-sm px-4">
-                🚀 Jalankan Absensi Otomatis
-            </button>
-            <p class="small text-muted mt-2">
-                Fitur ini akan melakukan absensi otomatis untuk semua lapak per 20 halaman.<br>
-                (Lapak berstatus <b>Izin</b> tidak akan ikut diubah)
-            </p>
-        </div>
-
-        <!-- Search -->
-        <div class="row justify-content-center mb-4">
-            <div class="col-12 col-md-8 col-lg-6">
-                <input type="text" id="lapakSearchInput" class="form-control shadow-sm"
-                    placeholder="🔍 Cari Nomor Lapak / Nama Pelapak...">
-            </div>
-        </div>
-
-        <!-- Select Halaman -->
-        <div class="row justify-content-center mb-4">
-            <div class="col-8 col-md-4 col-lg-3">
-                <select id="lapakPageSelect" class="form-select text-center shadow-sm">
-                    <!-- Option akan diisi otomatis dari JS -->
-                </select>
-            </div>
-        </div>
-
+        <h2 class="mb-3 text-center">Absensi Lapak Hari Ini</h2>
+        <input type="text" id="lapakSearchInput" class="form-control mb-4" placeholder="🔍 Cari lapak...">
+        <select id="lapakPageSelect" class="form-select mb-3">
+            <!-- Option akan diisi otomatis dari JS -->
+        </select>
         <!-- Daftar Lapak -->
-        <div id="lapakContainer" class="row g-3 justify-content-center"></div>
+        <div id="lapakContainer" class="row"></div>
     </div>
 
     <!-- Modal Absensi -->
+    <!-- Modal Absensi -->
     <div id="absensiModal" class="modal-overlay">
-        <div class="modal-content p-4 rounded-3 shadow">
-            <h5 id="absensiInfo" class="fw-bold text-center mb-3"></h5>
-            <div id="modalStatusLabel" class="text-center mb-3"></div>
+        <div class="modal-content">
+            <h5 id="absensiInfo"></h5>
+            <div id="modalStatusLabel" class="mb-3"></div> <!-- badge -->
 
             <!-- Dropdown Kategori Absensi -->
             <select id="absensiKategoriSelect" class="form-select mb-3">
@@ -75,30 +51,24 @@
             </select>
 
             <!-- Tombol -->
-            <div class="d-grid gap-2">
-                <button id="modalAbsenBtn" class="btn btn-success">Absen</button>
-                <button id="modalIzinBtn" class="btn btn-primary d-none">Izin</button>
-                <button id="modalHapusBtn" class="btn btn-danger">Hapus</button>
-                <button class="btn btn-secondary" onclick="closeAbsensiModal()">Tutup</button>
-            </div>
+            <button id="modalAbsenBtn" class="btn btn-success mb-2">Absen</button>
+            <button id="modalIzinBtn" class="btn btn-primary mb-2 d-none">Izin</button>
+            <button id="modalHapusBtn" class="btn btn-danger mb-2">Hapus</button>
+            <button class="btn btn-secondary" onclick="closeAbsensiModal()">Tutup</button>
         </div>
     </div>
 
+
+
     <!-- Loader -->
-    <div id="absensiLoading"
-        class="d-none position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-75 d-flex align-items-center justify-content-center">
+    <div id="absensiLoading" class="d-none">
         <div class="loader-content text-center">
             <div class="spinner-border text-light" role="status" style="width:3rem;height:3rem;"></div>
             <p id="absensiLoadingText" class="text-white mt-2">Sedang memproses...</p>
         </div>
     </div>
-
     <!-- Toast Notification -->
-    <div id="toastContainer"
-        class="toast-container position-fixed top-50 start-50 translate-middle d-flex flex-column align-items-center">
-    </div>
-
-    <!-- Script -->
+    <div id="toastContainer" class="toast-container"></div>
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </body>
